@@ -1,82 +1,112 @@
-// MOVE BLOCK
-const childBlock = document.querySelector('.child_block')
 
-let positionX = 0
-let positionY = 0
+function isValidGmail(email) {
+    var pattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    return pattern.test(email);
+}
 
-const move = () => {
-    if (positionX < 449 && positionY === 0) {
-        positionX+=2
-        childBlock.style.left = `${positionX}px`
-        setTimeout(move, 10)
-    } else if (positionX >= 449 && positionY < 449) {
-        positionY+=2
-        childBlock.style.top = `${positionY}px`
-        setTimeout(move, 10)
-    } else if (positionX > 0 && positionY > 0) {
-        positionX-=2
-        childBlock.style.left = `${positionX}px`
-        setTimeout(move, 10)
-    } else if (positionX === 0 && positionY > 0) {
-        positionY-=2
-        childBlock.style.top = `${positionY}px`
-        setTimeout(move, 10)
+var email1 = 'example@gmail.com';
+var email2 = 'example123@gmail.com';
+var email3 = 'example@outlook.com';
+
+console.log(isValidGmail(email1));
+console.log(isValidGmail(email2)); 
+console.log(isValidGmail(email3));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// task-2
+var intervalId;
+var seconds = 0;
+var isRunning = false;
+
+function startTimer() {
+    if (!isRunning) {
+        intervalId = setInterval(incrementSeconds, 1000);
+        isRunning = true;
     }
 }
 
-move()
+function stopTimer() {
+    clearInterval(intervalId);
+    isRunning = false;
+}
 
-// STOPWATCH
-const minutesBlock = document.querySelector('#minutes'),
-    secondsBlock = document.querySelector('#seconds'),
-    mlSecondsBlock = document.querySelector('#ml-seconds'),
-    startButton = document.querySelector('#start'),
-    stopButton = document.querySelector('#stop'),
-    resetButton = document.querySelector('#reset')
+function resetTimer() {
+    clearInterval(intervalId);
+    seconds = 0;
+    isRunning = false;
+    document.getElementById("secondsS").textContent = seconds;
+}
 
-let interval
-let minutes = 0
-let seconds = 0
-let mlSeconds = 0
+function incrementSeconds() {
+    seconds++;
+    document.getElementById("secondsS").textContent = seconds;
+}
 
-const startTimer = () => {
-    mlSeconds++
-    mlSeconds <= 99 && (mlSecondsBlock.innerHTML = mlSeconds)
-    mlSeconds === 100 && (mlSecondsBlock.innerHTML = '00')
+document.getElementById("start").addEventListener("click", startTimer);
+document.getElementById("stop").addEventListener("click", stopTimer);
+document.getElementById("reset").addEventListener("click", resetTimer)
 
-    mlSecondsBlock.innerHTML = `0${mlSeconds}`
-    mlSeconds > 9 && (mlSecondsBlock.innerHTML = mlSeconds)
-    if (mlSeconds > 99) {
-        seconds++
-        secondsBlock.innerHTML = `0${seconds}`
-        mlSeconds = 0
+//task-1
+
+var parentBlock = document.querySelector('.parent_block');
+var childBlock = document.querySelector('.child_block');
+var parentWidth = parentBlock.clientWidth;
+var parentHeight = parentBlock.clientHeight;
+var childWidth = childBlock.clientWidth;
+var childHeight = childBlock.clientHeight;
+var maxX = parentWidth - childWidth;
+var maxY = parentHeight - childHeight;
+var directionX = 1;
+var directionY = 0;
+var speedX = 2;
+var speedY = 2;
+
+function moveSquare() {
+    var currentX = parseInt(childBlock.style.left) || 0;
+    var currentY = parseInt(childBlock.style.top) || 0;
+
+    if (currentX >= maxX && directionX === 1) {
+        directionX = 0;
+        directionY = 1;
+    } else if (currentY >= maxY && directionY === 1) {
+        directionX = -1;
+        directionY = 0;
+    } else if (currentX <= 0 && directionX === -1) {
+        directionX = 0;
+        directionY = -1;
+    } else if (currentY <= 0 && directionY === -1) {
+        directionX = 1;
+        directionY = 0;
     }
-    seconds > 9 && (secondsBlock.innerHTML = seconds)
-    if (seconds > 59) {
-        minutes++
-        minutesBlock.innerHTML = `0${minutes}`
-        seconds = 0
-        secondsBlock.innerHTML = `0${seconds}`
-    }
-    minutes > 9 && (minutesBlock.innerHTML = minutes)
+
+    var newX = currentX + directionX * speedX;
+    var newY = currentY + directionY * speedY;
+
+    childBlock.style.left = newX + 'px';
+    childBlock.style.top = newY + 'px';
+
+    requestAnimationFrame(moveSquare);
 }
 
-startButton.onclick = () => {
-    clearInterval(interval)
-    interval = setInterval(startTimer,  10)
-}
-
-stopButton.onclick = () => {
-    clearInterval(interval)
-}
-
-resetButton.onclick = () => {
-    clearInterval(interval)
-    minutes = 0
-    seconds = 0
-    mlSeconds = 0
-    minutesBlock.innerHTML = '00'
-    secondsBlock.innerHTML = '00'
-    mlSecondsBlock.innerHTML = '00'
-}
-
+moveSquare();

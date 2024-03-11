@@ -1,0 +1,52 @@
+body {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.heart {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-right: 60px;
+}
+
+.heart::before,
+.heart::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 52px;
+    height: 80px;
+    border-radius: 50px 50px 0 0;
+    background: red;
+}
+
+.heart::before {
+    left: 0px;
+    transform: rotate(-45deg);
+    transform-origin: 51px 50px;
+}
+
+.heart::after {
+    left: 51px;
+    transform: rotate(45deg);
+    transform-origin: 0px 50px;
+}
+
+.heart::before,
+.heart::after {
+    animation: neon-pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes neon-pulse {
+    0% {
+        box-shadow: 0 0 5px red, 0 0 20px red, 0 0 30px red, 0 0 40px red, 0 0 50px red, 0 0 60px red, 0 0 70px red;
+    }
+    100% {
+        box-shadow: none;
+    }
+}
+
